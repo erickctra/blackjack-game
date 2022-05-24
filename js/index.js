@@ -14,11 +14,20 @@ function getValue(){
 
 function pushCard() {
     const cardValue = getValue();
-    deck.push([getSuit(), cardValue]);
+    const suitValue = getSuit();
+    deck.push([suitValue, cardValue]);
 
+    generateCard(suitValue, cardValue);
+    console.log(deck)
     scoreCounter(cardValue);
-    console.log(deck);
-    console.log(score);
+}
+
+function generateCard(suit, cardValue) {
+    const card = document.createElement("div");
+
+    card.classList.add(suit, cardValue);
+    card.style.backgroundPositionX = `${-100 * cardValue + 100}px`;
+    document.getElementById("main").appendChild(card);
 }
 
 

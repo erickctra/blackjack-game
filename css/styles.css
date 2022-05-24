@@ -1,0 +1,23 @@
+#main > div {
+    width: 104px;
+    height: 144px;
+
+    background: url(../img/CuteCards.png);
+}
+
+.Spades {
+    /* background-position-y: -144px; */
+    background-position-y: calc(-144px * 2) !important;
+}
+
+.Hearts {
+    background-position-y: calc(-144px * 3) !important;
+}
+
+.Clubs {
+    background-position-y: 0 !important;
+}
+
+.Diamonds {
+    background-position-y: calc(-144px) !important;
+}
