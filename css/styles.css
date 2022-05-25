@@ -1,9 +1,73 @@
-#main > div {
+* {
+    padding: 0;
+    margin: 0;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100vw;
+    height: 100vh;
+
+    background: #ff6395;
+}
+
+#table {
+    display: flex;
+    flex-direction: row;
+}
+
+#draft, #stack {
+
     width: 104px;
     height: 144px;
 
     background: url(../img/CuteCards.png);
+    background-position: calc(-99.8px * 14) calc(-144px * 3);
+
+    cursor: pointer;
+
 }
+
+#stack {
+    background-position: calc(-99.8px * 14) 0;
+}
+
+.stopGame {
+    filter: grayscale(100);
+    cursor: initial !important;
+}
+
+#deck, #computer {
+    display: flex;
+    flex-wrap: nowrap;
+
+    margin-top: 30px;
+    min-width: 300px;
+    height: 200px;
+
+    justify-content: center;
+}
+
+#deck > div, #computer > div {
+    width: 102px;
+    height: 144px;
+
+    background: url(../img/CuteCards.png);
+    animation: .3s ease-out 0s 1 slideInFromLeft;
+
+    cursor: pointer;
+
+}
+
+#deck > div + div, #computer > div + div {
+    margin-left: -50px;
+}
+
 
 .Spades {
     /* background-position-y: -144px; */
@@ -21,3 +85,55 @@
 .Diamonds {
     background-position-y: calc(-144px) !important;
 }
+
+.computerCardHidden {
+    width: 102px;
+    height: 144px;
+    background: url(../img/CuteCards.png);
+    background-position: calc(-99.8px * 14) calc(-144px * 2) !important;
+
+}
+
+.closed {
+    display: none;
+}
+
+/* Custom font */
+
+@font-face {
+    font-family: 'Cute'; /*a name to be used later*/
+    src: url(../fonts/CHERI.TTF); /*URL to font*/
+}
+
+#main h1 {
+    font-family: 'Cute';
+}
+
+/* Animations */
+
+#draft, #deck > div {
+    transition: transform 100ms ease-in-out;
+}
+
+#draft:hover,
+#deck > div:hover {
+    transform: translateY(-20px);
+}
+
+
+header {  
+    /* This section calls the slideInFromLeft animation we defined above */
+    
+    background: #333;
+    padding: 30px;
+  }
+
+
+@keyframes slideInFromLeft {
+    0% {
+      transform: translateX(-40%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
