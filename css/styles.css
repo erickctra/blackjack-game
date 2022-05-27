@@ -26,6 +26,7 @@ body {
 }
 
 #table {
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -38,6 +39,57 @@ body {
 
     background: url(../img/CuteCards.png);
     background-position: calc(-99.8px * 14) calc(-144px * 3);
+}
+
+#draft, #discartedCard {
+    position: relative;
+
+    /* overflow: hidden; */
+}
+
+.border {
+    position: absolute;
+    margin-top: -6px;
+    margin-left: -4px;
+    padding: 1px;
+    width: 90px;
+    height: 134px;
+    border: 10px solid rgb(255, 235, 122);
+    border-radius: 25px;
+
+    animation:  ease-out 2s pulse infinite;
+}
+
+.border-discarted {
+    position: absolute;
+
+    width: 90px;
+    height: 134px;
+    border: 10px solid rgb(255, 235, 122);
+    border-radius: 25px;
+
+    animation:  ease-out 2s pulse infinite;
+}
+
+.deck-border {
+    background: none !important;
+    position: absolute;
+
+    margin-left: 0px !important;
+    margin-top: -6px;
+
+    width: 245px !important;
+    height: 134px !important;
+
+    border: 10px solid rgb(255, 235, 122);
+    border-radius: 25px;
+
+    animation:  ease-out 2s pulse infinite !important;
+    cursor: context-menu !important;
+}
+
+.deck-border:hover {
+    transform: none !important;
 }
 
 #draft,
@@ -61,6 +113,11 @@ body {
 .stopGame {
     filter: grayscale(100);
     cursor: initial !important;
+}
+
+#deck {
+    margin-top: 20px;
+    position: relative;
 }
 
 #deck,
@@ -178,7 +235,7 @@ body {
 
 #playerRound {
     display: flex;
-    height: 15vh;
+    height: 16vh;
     flex-direction: row;
 }
 
@@ -306,6 +363,20 @@ body {
     }
 }
 
+@keyframes pulse {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
 @keyframes increaseSize {
     0% {
         width: 0;
@@ -353,6 +424,12 @@ body {
     #players {
 
         padding-right: 10%;
+
+    }
+
+    #arrow {
+
+        padding-top: -50px;
 
     }
 }

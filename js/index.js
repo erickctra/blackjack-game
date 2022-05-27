@@ -92,6 +92,20 @@ function pushCard(player) {
     document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
 
     player.deck.push(card);
+
+
+    document.getElementById('border').classList = [];
+    document.getElementById('discartedCard').innerHTML = '';
+    document.getElementById('discartedCard').classList = [];
+
+    const border = document.createElement('div');
+    border.classList.add('deck-border');
+
+    document.getElementById('deck').appendChild(border);
+
+
+
+
     discartedCard = [];
   } else {
     console.log('discard one card');
@@ -105,6 +119,7 @@ function takeDiscarted(player) {
     player.deck.push(discartedCard);
     player.increaseScore(formatScore(discartedCard[1]));
     document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+    document.getElementById('border').classList = [];
     
 
   } else {
@@ -125,13 +140,13 @@ function removeCard(player, card) {
       player.decreaseScore(formatScore(player.deck[cardIndex][1]));
       if (player.score == 21) {
 
+        resetGame();
         renderWinner(player);
 
-        resetGame();
 
         return;
       }
-
+      
       player.deck.splice(cardIndex, 1);
 
       console.log(player.deck);
@@ -225,10 +240,10 @@ function computerPlay() {
     );
 
     if (absolute == 21) {
+      document.getElementById('arrow').style.alignSelf = 'flex-end';
+      document.getElementById('border').classList.add('border');
       renderWinner(computer);
       setPlayerRound(computer);
-    document.getElementById('arrow').style.alignSelf = 'flex-end';
-
       resetGame();
       return;
     }
@@ -270,6 +285,7 @@ function computerPlay() {
 
     renderCard(computer, pullCard[0], pullCard[1]);
     setPlayerRound(computer);
+    renderPlayerBorderRound();
     document.getElementById('arrow').style.alignSelf = 'flex-end';
 
     return;
@@ -314,6 +330,7 @@ function computerPlay() {
     document.getElementById('computer').childNodes.item(0).remove();
 
     setPlayerRound(computer);
+    renderPlayerBorderRound();
     document.getElementById('arrow').style.alignSelf = 'flex-end';
 
     return;
@@ -326,14 +343,16 @@ function computerPlay() {
 
 function renderDiscarded(card) {
   document.getElementById('discartedCard').innerHTML = '';
-
   const htmlCard = document.createElement('div');
   htmlCard.classList.add(card[0], card[1], 'animateDiscarted');
   htmlCard.style.zIndex = `${suits.length}`;
+  htmlCard.style.position = 'relative';
   htmlCard.style.width = '104px';
   htmlCard.style.height = '144px';
+  htmlCard.style.marginRight = '20px';
   htmlCard.style.background = 'url(./img/CuteCards.png)';
   htmlCard.style.backgroundPositionX = `${-100 * card[1] + 100}px`;
+
   htmlCard.onclick = () => {
     if(newPlayer.myTurn && newPlayer.deck.length == 3) {
       renderCard(newPlayer, discartedCard[0], discartedCard[1]);
@@ -342,21 +361,40 @@ function renderDiscarded(card) {
   };
 
   document.getElementById('discartedCard').appendChild(htmlCard);
+  // document.getElementById('discartedCard').classList.add('border-discarted');
+}
+
+function renderPlayerBorderRound() {
+
+  if (discartedCard != []) {
+    const border = document.createElement('div');
+    border.classList.add('.border-discarted');
+    border.style.position = 'absolute';
+    border.style.marginTop = '-150px';
+    border.style.marginLeft = '-5px';
+    border.style.width = '90px';
+    border.style.height = '134px';
+    border.style.borderRadius = '25px';
+    border.style.animation = 'ease-out 2s pulse infinite';
+    border.style.border = '10px solid rgb(255, 235, 122)';
+    document.getElementById('discartedCard').appendChild(border);
+
+    document.getElementById('border').classList.add('border');
+  }
 }
 
 function renderWinner(winner) {
-
   const winnerText = winner.name == "computer" ? 'PC win' : 'You win';
 
   document.getElementById('alert').style.display = "flex";
   document.getElementById('winnerText').innerHTML = winnerText;
+
 
   setTimeout(function(){
     document.getElementById('alert').style.display = "none";
           
         }, 2000);
 }
-
 
 function renderCard(player, suitValue, cardValue) {
   if (player.name == 'player') {
@@ -368,7 +406,12 @@ function renderCard(player, suitValue, cardValue) {
       if (player.deck.length == 4) {
         htmlCard.remove();
         removeCard(player, [suitValue, cardValue]);
-        document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+
+        if (newPlayer) {
+          document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+
+          document.getElementById('deck').childNodes.item(3).remove();
+        }
 
       }
     };
