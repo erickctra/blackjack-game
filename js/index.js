@@ -138,7 +138,8 @@ function removeCard(player, card) {
       console.log('---------------');
       console.log(`discarted card: ${discartedCard}`);
       console.log('---------------');
-
+      
+    document.getElementById('arrow').style.alignSelf = 'flex-start';
       setPlayerRound(player);
       // TODO PC TURN
       startGame();
@@ -226,6 +227,8 @@ function computerPlay() {
     if (absolute == 21) {
       renderWinner(computer);
       setPlayerRound(computer);
+    document.getElementById('arrow').style.alignSelf = 'flex-end';
+
       resetGame();
       return;
     }
@@ -267,6 +270,8 @@ function computerPlay() {
 
     renderCard(computer, pullCard[0], pullCard[1]);
     setPlayerRound(computer);
+    document.getElementById('arrow').style.alignSelf = 'flex-end';
+
     return;
   } else {
     console.log('comprou uma carta');
@@ -309,6 +314,8 @@ function computerPlay() {
     document.getElementById('computer').childNodes.item(0).remove();
 
     setPlayerRound(computer);
+    document.getElementById('arrow').style.alignSelf = 'flex-end';
+
     return;
   }
 }

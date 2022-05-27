@@ -9,6 +9,7 @@ body {
     margin: 0;
     padding: 0;
     position: relative;
+
 }
 
 #main {
@@ -27,7 +28,9 @@ body {
 #table {
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
+
 
 #pack {
     width: 104px;
@@ -65,9 +68,7 @@ body {
     display: flex;
     flex-wrap: nowrap;
 
-    margin-top: 100px;
     min-width: 300px;
-    height: 200px;
 
     justify-content: center;
 }
@@ -163,26 +164,76 @@ body {
     font-size: 30px;
     color: white;
     
+    font-weight: 100;
 }
 
 #score {
     width: 100vw;
+    max-width: 700px;
     display: flex;
 
-    justify-content: space-around;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+#playerRound {
+    display: flex;
+    height: 15vh;
+    flex-direction: row;
+}
+
+#players {
+    display: flex;
+    padding-left: 40%;
+    padding-right: 20%;
+    padding-top: 10%;
+    flex-direction: column;
+    height: 15vh;
+
+    justify-content: space-between;
+}
+
+#pc-avatar {
+    min-width: calc(6vh);
+    min-height: 6vh;
+    background: url('../img/computer.png') no-repeat;
+    background-size: 6vh;
+}
+
+#player-avatar {
+    min-width: calc(6vh);
+    min-height: 7vh;
+    background: url('../img/player.png') no-repeat;
+    background-size: 6vh;
+}
+
+#arrow {
+    min-width: 13vw;
+    
+    min-height: 6vh;
+    background: url('../img/arrow.png') no-repeat;
+    background-size: 6vh;
+
+    align-self: flex-end;
 }
 
 #display{
-    width: 200px;
+    /* width: calc(100px + 20vh);
     height: 180px;
     background: url('../img/computerArt.png') no-repeat;
-    background-size: 200px;
+    background-size: 200px; */
+    margin-right: -20px;
+
+    min-width: calc(25vh);
+    min-height: 21vh;
+    background: url('../img/computerArt.png') no-repeat;
+    background-size: 25vh;
 }
 
 #display h1 {
     color: #000;
-    margin: 20% 28%;
-    font-size: 40px;
+    margin: 18% 28%;
+    font-size: 50px;
 }
 
 /* Animations */
@@ -290,5 +341,18 @@ body {
 
     100% {
         opacity: 0;
+    }
+}
+
+
+@media (min-width: 700px) {
+    #score {
+        overflow: visible;
+    }
+
+    #players {
+
+        padding-right: 10%;
+
     }
 }
