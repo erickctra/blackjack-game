@@ -390,7 +390,7 @@ function renderPlayerBorderRound() {
 }
 
 function renderWinner(winner) {
-  const winnerText = winner.name == "computer" ? 'PC win' : 'You win';
+  const winnerText = winner.name == "computer" ? 'PC ganhou' : 'Você ganhou';
 
   document.getElementById('alert').style.display = "flex";
   document.getElementById('winnerText').innerHTML = winnerText;
@@ -429,4 +429,8 @@ function renderCard(player, suitValue, cardValue) {
 
     document.getElementById('computer').appendChild(htmlCard);
   }
+}
+
+function closeTutorial() {
+  document.getElementById('tutorial').style.display = 'none';
 }
