@@ -328,7 +328,7 @@ function renderDiscarded(card) {
   htmlCard.style.background = 'url(./img/CuteCards.png)';
   htmlCard.style.backgroundPositionX = `${-100 * card[1] + 100}px`;
   htmlCard.onclick = () => {
-    if(newPlayer.myTurn) {
+    if(newPlayer.myTurn && newPlayer.deck.length == 3) {
       renderCard(newPlayer, discartedCard[0], discartedCard[1]);
       takeDiscarted(newPlayer);
     }
