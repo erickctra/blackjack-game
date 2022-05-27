@@ -358,6 +358,11 @@ function renderDiscarded(card) {
     if(newPlayer.myTurn && newPlayer.deck.length == 3) {
       renderCard(newPlayer, discartedCard[0], discartedCard[1]);
       takeDiscarted(newPlayer);
+
+      const border = document.createElement('div');
+      border.classList.add('deck-border');
+  
+      document.getElementById('deck').appendChild(border);
     }
   };
 
