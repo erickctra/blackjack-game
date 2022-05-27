@@ -325,7 +325,7 @@ function renderDiscarded(card) {
   htmlCard.style.zIndex = `${suits.length}`;
   htmlCard.style.width = '104px';
   htmlCard.style.height = '144px';
-  htmlCard.style.background = 'url(../img/CuteCards.png)';
+  htmlCard.style.background = 'url(./img/CuteCards.png)';
   htmlCard.style.backgroundPositionX = `${-100 * card[1] + 100}px`;
   htmlCard.onclick = () => {
     if(newPlayer.myTurn) {
