@@ -1,12 +1,197 @@
+class Player {
+  constructor(name, myTurn) {
+    this.name = name;
+    this.myTurn = myTurn;
+  }
+  deck = [];
+  score = 0;
+  increaseScore(score) {
+    this.score = this.score + score;
+  }
+
+  decreaseScore(score) {
+    this.score = this.score - score;
+  }
+}
+
 const suits = ['Spades', 'Hearts', 'Clubs', 'Diamonds'];
-let computerDeck = [];
-let deck = [];
+let discartedCard = [];
+let gameStarted = true;
 
-let gameEnd = false;
-let computerScore = 0;
-let score = 0;
+let newPlayer;
+let computer;
 
-let playerRound = true;
+// START GAME
+
+function startGame() {
+  if (gameStarted) {
+    newPlayer = new Player('player', true);
+    computer = new Player('computer', false);
+
+    takeHand(newPlayer);
+    takeHand(computer);
+
+    console.log(newPlayer.score);
+    console.log(computer.score);
+
+    if (newPlayer.score == 21 || computer.score == 21) {
+      resetGame();
+
+      console.log('velha');
+      startGame();
+      return;
+    }
+    gameStarted = false;
+
+    console.log('---------------');
+    console.log('player turn');
+    console.log('---------------');
+  } else {
+    // TODO - vez do jogador puxar uma carta e darcartar outra
+    if (computer.myTurn) {
+      setTimeout(function(){
+        computerPlay();
+      }, 1500);
+
+      return;
+    }
+    console.log('maos dadas');
+  }
+}
+
+function takeHand(player) {
+  while (player.deck.length < 3) {
+    const card = generateCard(player);
+    player.deck.push(card);
+
+    player.increaseScore(formatScore(card[1]));
+
+    document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+  }
+}
+
+function pushCard(player) {
+  if (gameStarted == true) {
+    startGame();
+    return;
+  }
+
+  if (!player.myTurn) {
+    console.log('espera sua vez');
+    return;
+  }
+
+  if (player.deck.length == 3) {
+    console.log('---------------');
+    console.log('player turn drafted');
+    console.log('---------------');
+    card = generateCard(player);
+
+    player.increaseScore(formatScore(card[1]));
+
+    document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+
+    player.deck.push(card);
+    discartedCard = [];
+  } else {
+    console.log('discard one card');
+  }
+}
+
+function takeDiscarted(player) {
+  if (player.deck.length == 3 && discartedCard.length > 0) {
+  document.getElementById('discartedCard').innerHTML = '';
+
+    player.deck.push(discartedCard);
+    player.increaseScore(formatScore(discartedCard[1]));
+    document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+
+
+  } else {
+    console.log('discard one card');
+  }
+}
+
+function removeCard(player, card) {
+  if (player.deck.length == 4) {
+    let cardIndex = player.deck.indexOf(
+      player.deck.find((v) => v[0] === card[0] && v[1] === card[1])
+    );
+
+    if (cardIndex >= 0) {
+      discartedCard = player.deck[cardIndex];
+      renderDiscarded(discartedCard);
+
+      player.decreaseScore(formatScore(player.deck[cardIndex][1]));
+      if (player.score == 21) {
+
+        renderWinner(player);
+
+        resetGame();
+
+        return;
+      }
+
+      player.deck.splice(cardIndex, 1);
+
+      console.log(player.deck);
+      console.log('---------------');
+      console.log(`discarted card: ${discartedCard}`);
+      console.log('---------------');
+
+      setPlayerRound(player);
+      // TODO PC TURN
+      startGame();
+    } else {
+      console.log('no');
+    }
+  }
+}
+
+function setPlayerRound(player) {
+  if (player.name == 'computer') {
+    player.myTurn = false;
+    newPlayer.myTurn = true;
+  } else {
+    player.myTurn = false;
+    computer.myTurn = true;
+  }
+}
+
+function generateCard(player) {
+  const cardValue = getValue();
+  const suitValue = getSuit();
+
+  const card = [suitValue, cardValue];
+
+  renderCard(player, suitValue, cardValue);
+
+  return card;
+}
+
+function formatScore(score) {
+  if (score > 10) {
+    return 10;
+  } else {
+    return score;
+  }
+}
+
+function resetGame() {
+  newPlayer = '';
+  computer = '';
+  discartedCard = [];
+  gameStarted = true;
+
+  document.getElementById('computer').innerHTML = '';
+  document.getElementById('deck').innerHTML = '';
+  document.getElementById('discartedCard').innerHTML = '';
+  document.getElementById('scoreDisplay').innerHTML = '';
+
+
+}
+
+// RANDOM VALUES
 
 function getSuit() {
   var randomValue = Math.floor(Math.random() * suits.length);
@@ -18,125 +203,172 @@ function getValue() {
   return randomValue;
 }
 
-function pushCard() {
-  if (!gameEnd) {
-    gameEnd = true;
+// can win
 
-    getHand();
-    generateComputerHand();
+function computerPlay() {
+  console.log('*****************');
+  console.log('vez do computador');
 
-    if (score == 21) {
-      reset();
+  for (let index = 0; index < 3; index++) {
+    let second = index + 1;
+    let aux = second > 2 ? 0 : second;
+
+    let cardOne = formatScore(computer.deck[index][1]);
+    let cardTwo = formatScore(computer.deck[aux][1]);
+    let formatedDiscartedCard = formatScore(discartedCard[1]);
+
+    let absolute = cardOne + cardTwo + formatedDiscartedCard;
+
+    console.log(
+      `combination: ${index} ${second == 3 ? 0 : second} - ${absolute}`
+    );
+
+    if (absolute == 21) {
+      renderWinner(computer);
+      setPlayerRound(computer);
+      resetGame();
+      return;
     }
+  }
+
+  console.log('computer.score');
+  console.log(computer.deck);
+  console.log(computer.score);
+  console.log('¨¨¨¨¨¨¨¨');
+
+  // 
+  var randomDecision = Math.floor(Math.random() * 2);
+
+  console.log('A carta descartada não é decisiva, entao: ');
+
+  document.getElementById('discartedCard').innerHTML = '';
+
+
+  if (randomDecision == 1) {
+    console.log('pegou a carta descartada');
+    const pullCard = discartedCard;
+    console.log('ultima carta descartada ' + pullCard);
+
+    // choose random card from deck
+    let randomCardChoose = Math.floor(Math.random() * 3);
+
+    discartedCard = computer.deck[randomCardChoose];
+    renderDiscarded(discartedCard);
+
+    console.log('em troca, vai descartar:');
+    console.log(discartedCard);
+    console.log('¨¨¨¨¨¨¨¨');
+
+    computer.decreaseScore(formatScore(discartedCard[1]));
+    computer.deck.splice(randomCardChoose, 1);
+    computer.deck.push(pullCard);
+    computer.increaseScore(formatScore(pullCard[1]));
+    document.getElementById('computer').childNodes.item(0).remove();
+
+    renderCard(computer, pullCard[0], pullCard[1]);
+    setPlayerRound(computer);
     return;
-  } else if (playerRound === false) {
-    alert('voce ja jogou, espera ai');
-  } else if (deck.length < 4) {
-    const cardValue = getValue();
-    const suitValue = getSuit();
-
-    deck.push([suitValue, cardValue]);
-    generateCard(suitValue, cardValue);
-    updateCounter(cardValue);
   } else {
-    alert('voce ja tem 4 cartas, descarte uma');
-  }
-}
+    console.log('comprou uma carta');
+    discartedCard = [];
 
-function getHand() {
-  while (deck.length < 3) {
-    const cardValue = getValue();
-    const suitValue = getSuit();
+    const cardPushed = generateCard(computer);
 
-    deck.push([suitValue, cardValue]);
-    generateCard(suitValue, cardValue);
+    for (let index = 0; index < 3; index++) {
+      let second = index + 1;
+      let aux = second > 2 ? 0 : second;
 
-    updateCounter(cardValue);
-  }
-}
+      let cardOne = formatScore(computer.deck[index][1]);
+      let cardTwo = formatScore(computer.deck[aux][1]);
+      let cardPushedValue = formatScore(cardPushed[1]);
 
-function generateComputerHand() {
-  while (computerDeck.length < 3) {
-    const card = document.createElement('div');
-    card.classList.add('computerCardHidden');
+      let absolute = cardOne + cardTwo + cardPushedValue;
 
-    const cardValue = getValue();
-    const suitValue = getSuit();
+      console.log(
+        `combination: ${index} ${second == 3 ? 0 : second} - ${absolute}`
+      );
 
-    computerDeck.push([suitValue, cardValue]);
-    document.getElementById('computer').appendChild(card);
-    computerScore = computerScore + cardValue;
-  }
-  console.log('computer score ' + computerScore);
-}
-
-function generateCard(suit, cardValue) {
-  const card = document.createElement('div');
-
-  card.classList.add(suit, cardValue);
-  card.style.zIndex = `${suits.length}`;
-  card.style.backgroundPositionX = `${-100 * cardValue + 100}px`;
-
-  card.addEventListener(
-    'click',
-    function () {
-      if (deck.length > 3) {
-        let index = deck.indexOf(
-          deck.find(
-            (cardDeck) => cardDeck[0] === suit && cardDeck[1] === cardValue
-          )
-        );
-        deck.splice(index, 1);
-        card.remove();
-        releaseCard(cardValue);
-        console.log(cardValue);
-        stack.appendChild = card;
-        document.getElementById('stack').style.backgroundPositionX = ` ${
-          -100 * cardValue + 100
-        }px`;
-        document.getElementById('stack').classList.add(suit);
-        playerRound = false;
+      if (absolute == 21) {
+        renderWinner(computer);
+        resetGame();
+        return;
       }
-    },
-    false
-  );
+    }
 
-  document.getElementById('deck').appendChild(card);
-}
+    // choose random card from deck
+    let randomCardChoose = Math.floor(Math.random() * 3);
 
-function updateCounter(cardValue) {
-  if (cardValue > 10) {
-    score = score + 10;
-  } else {
-    score = score + cardValue;
-  }
-  const counter = (document.getElementById('counter').innerHTML = score);
-}
+    computer.decreaseScore(formatScore(discartedCard[1]));
+    discartedCard = computer.deck[randomCardChoose];
+    renderDiscarded(discartedCard);
 
-function formatValue(value) {
-  if (value > 10) {
-    return 10;
-  } else {
-    return value;
+    computer.deck.splice(randomCardChoose, 1);
+    computer.deck.push(cardPushed);
+    computer.increaseScore(formatScore(cardPushed[1]));
+
+    document.getElementById('computer').childNodes.item(0).remove();
+
+    setPlayerRound(computer);
+    return;
   }
 }
 
-function releaseCard(cardValue) {
-  if (cardValue > 10) {
-    score = score - 10;
-  } else {
-    score = score - cardValue;
-  }
-  const counter = (document.getElementById('counter').innerHTML = score);
+
+
+// PRINT IN CANVA
+
+function renderDiscarded(card) {
+  document.getElementById('discartedCard').innerHTML = '';
+
+  const htmlCard = document.createElement('div');
+  htmlCard.classList.add(card[0], card[1], 'animateDiscarted');
+  htmlCard.style.zIndex = `${suits.length}`;
+  htmlCard.style.width = '104px';
+  htmlCard.style.height = '144px';
+  htmlCard.style.background = 'url(../img/CuteCards.png)';
+  htmlCard.style.backgroundPositionX = `${-100 * card[1] + 100}px`;
+  htmlCard.onclick = () => {
+    renderCard(newPlayer, discartedCard[0], discartedCard[1])
+    takeDiscarted(newPlayer);
+  };
+
+  document.getElementById('discartedCard').appendChild(htmlCard);
 }
 
-function reset() {
-  alert('quem embaralhou isso aqui?');
-  gameEnd = false;
-  deck = [];
-  computerDeck = [];
-  document.getElementById('deck').innerHTML = '';
-  document.getElementById('counter').innerHTML = '';
-  score = 0;
-  return;
+function renderWinner(winner) {
+
+  const winnerText = winner.name == "computer" ? 'PC win' : 'You win';
+
+  document.getElementById('alert').style.display = "flex";
+  document.getElementById('winnerText').innerHTML = winnerText;
+
+  setTimeout(function(){
+    document.getElementById('alert').style.display = "none";
+          
+        }, 2000);
+}
+
+
+function renderCard(player, suitValue, cardValue) {
+  if (player.name == 'player') {
+    const htmlCard = document.createElement('div');
+    htmlCard.classList.add(suitValue, cardValue);
+    htmlCard.style.zIndex = `${suits.length}`;
+    htmlCard.style.backgroundPositionX = `${-100 * cardValue + 100}px`;
+    htmlCard.onclick = () => {
+      if (player.deck.length == 4) {
+        htmlCard.remove();
+        removeCard(player, [suitValue, cardValue]);
+        document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
+
+      }
+    };
+
+    document.getElementById('deck').appendChild(htmlCard);
+  } else {
+    const htmlCard = document.createElement('div');
+    htmlCard.classList.add('computerCardHidden');
+
+    document.getElementById('computer').appendChild(htmlCard);
+  }
 }

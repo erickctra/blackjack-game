@@ -9,17 +9,29 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-    
-    <div id="main">
-        <div id="computer"></div>
-        <div id="table">
-          <div id="stack"></div>
-          <div id="draft" onclick="pushCard()"></div>
-        </div>
-        <h1 id="counter"></h1>
-        <div id="deck"></div>
+    <div id="alert">
+        <h1 id="winnerText">You Win</h1>
     </div>
+    <div id="main">
+      <div id="computer"></div>
 
+      <div id="table">
+        <div id="discartedCard">
+
+        </div>
+        <div id="pack">
+          <div id="draft" onclick="pushCard(newPlayer)"></div>
+        </div>
+      </div>
+
+      <h1 id="counter"></h1>
+      <div id="deck"></div>
+      <div id="score">
+        <div id="display">
+          <h1 id="scoreDisplay"></h1>
+        </div>
+      </div>
+    </div>
 
     <script src="js/index.js"></script>
   </body>
