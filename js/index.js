@@ -142,7 +142,8 @@ function removeCard(player, card) {
 
         resetGame();
         renderWinner(player);
-
+      document.getElementById('border').classList.add('border');
+        
 
         return;
       }
