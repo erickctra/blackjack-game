@@ -105,7 +105,7 @@ function takeDiscarted(player) {
     player.deck.push(discartedCard);
     player.increaseScore(formatScore(discartedCard[1]));
     document.getElementById('scoreDisplay').innerHTML = newPlayer.score;
-
+    
 
   } else {
     console.log('discard one card');
@@ -328,8 +328,10 @@ function renderDiscarded(card) {
   htmlCard.style.background = 'url(../img/CuteCards.png)';
   htmlCard.style.backgroundPositionX = `${-100 * card[1] + 100}px`;
   htmlCard.onclick = () => {
-    renderCard(newPlayer, discartedCard[0], discartedCard[1])
-    takeDiscarted(newPlayer);
+    if(newPlayer.myTurn) {
+      renderCard(newPlayer, discartedCard[0], discartedCard[1]);
+      takeDiscarted(newPlayer);
+    }
   };
 
   document.getElementById('discartedCard').appendChild(htmlCard);
